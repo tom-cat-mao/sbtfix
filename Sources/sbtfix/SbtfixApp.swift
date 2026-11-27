@@ -41,6 +41,15 @@ extension AmbientMode {
         }
     }
 
+    var shortTitle: String {
+        switch self {
+        case .noiseCancelling: "NC"
+        case .windNoiseReduction: "Wind"
+        case .ambient: "Ambient"
+        case .off: "Off"
+        }
+    }
+
     var symbol: String {
         switch self {
         case .noiseCancelling: "person.wave.2.fill"
@@ -54,6 +63,7 @@ extension AmbientMode {
 struct ControlPanel: View {
     @ObservedObject var controller: HeadphoneController
     @State private var level: Double = 10
+    @State private var showingPowerOffConfirmation = false
 
     var body: some View {
         VStack(alignment: .leading, spacing: 14) {
@@ -75,7 +85,11 @@ struct ControlPanel: View {
             }
             Divider()
             HStack {
-                if controller.status != .connected {
+                if controller.status == .connected {
+                    Button(role: .destructive) { showingPowerOffConfirmation = true } label: {
+                        Label("Power Off…", systemImage: "power")
+                    }
+                } else {
                     Button("Retry") { controller.connect() }
                 }
                 Spacer()
@@ -91,6 +105,13 @@ struct ControlPanel: View {
             controller.refresh()
         }
         .onChange(of: controller.ambient.level) { _, new in level = Double(new) }
+        .confirmationDialog("Power Off Headphones?", isPresented: $showingPowerOffConfirmation,
+                            titleVisibility: .visible) {
+            Button("Power Off", role: .destructive) { controller.powerOff() }
+            Button("Cancel", role: .cancel) {}
+        } message: {
+            Text("The headphones will turn off and disconnect from your Mac.")
+        }
     }
 
     private var header: some View {
@@ -122,23 +143,17 @@ struct ControlPanel: View {
     }
 
     private var modePicker: some View {
-        HStack(spacing: 8) {
+        Picker("Listening Mode", selection: Binding(
+            get: { controller.ambient.mode },
+            set: { controller.setMode($0) })) {
             ForEach(controller.availableModes) { mode in
-                let selected = controller.ambient.mode == mode
-                Button { controller.setMode(mode) } label: {
-                    VStack(spacing: 6) {
-                        Image(systemName: mode.symbol).font(.title2)
-                        Text(mode.title).font(.caption).multilineTextAlignment(.center)
-                    }
-                    .frame(maxWidth: .infinity, minHeight: 64)
-                    .background(selected ? Color.accentColor.opacity(0.9) : Color.primary.opacity(0.07),
-                                in: RoundedRectangle(cornerRadius: 10))
-                    .foregroundStyle(selected ? .white : .primary)
-                    .contentShape(Rectangle())
-                }
-                .buttonStyle(.plain)
+                Text(mode.shortTitle)
+                    .accessibilityLabel(mode.title)
+                    .tag(mode)
             }
         }
+        .pickerStyle(.segmented)
+        .labelsHidden()
     }
 
     private var ambientOptions: some View {

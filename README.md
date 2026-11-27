@@ -18,6 +18,7 @@ talks to the headphones directly over Bluetooth using the same protocol the phon
   Reduction on models that have it
 - Ambient level slider (1–20) and Focus on Voice
 - Speak-to-Chat on/off
+- Power off the headphones from the menu
 - Battery level with a charging indicator; left, right and case for earbuds
 - Detects the model and protocol generation automatically, and only shows what your model
   supports

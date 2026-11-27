@@ -145,6 +145,12 @@ final class HeadphoneController: NSObject, ObservableObject {
         enqueue(Command.setSpeakToChat(on, version), key: "stc")
     }
 
+    func powerOff() {
+        guard let version, status == .connected else { return }
+        queue.removeAll()
+        enqueue(Command.powerOff(version), key: "power-off")
+    }
+
     private func sendAmbient(_ s: AmbientState) {
         guard let version else { return }
         ambient = s

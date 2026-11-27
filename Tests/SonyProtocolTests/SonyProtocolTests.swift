@@ -88,6 +88,10 @@ final class V2Tests: XCTestCase {
         XCTAssertEqual(EventParser.parse([0x23, 0x0A, 0x3C, 0x01], version: .v2), .batteryCase(BatteryLevel(level: 60, charging: true)))
     }
 
+    func testPowerOff() {
+        XCTAssertEqual(Command.powerOff(.v2), [0x24, 0x03, 0x01])
+    }
+
     func testSpeakToChat() {
         XCTAssertEqual(Command.setSpeakToChat(true, .v2), [0xF8, 0x0C, 0x00, 0x01])
         XCTAssertEqual(EventParser.parse([0xF9, 0x0C, 0x00, 0x01], version: .v2), .speakToChat(enabled: true))
@@ -130,6 +134,10 @@ final class V1Tests: XCTestCase {
         XCTAssertEqual(EventParser.parse([0x13, 0x01, 0x32, 0x00, 0x34, 0x01], version: .v1),
                        .batteryDual(left: BatteryLevel(level: 50, charging: false), right: BatteryLevel(level: 52, charging: true)))
         XCTAssertEqual(Command.getBattery(.v1, kind: .dualAlt), nil)
+    }
+
+    func testPowerOff() {
+        XCTAssertEqual(Command.powerOff(.v1), [0x22, 0x00, 0x01])
     }
 
     func testSpeakToChat() {

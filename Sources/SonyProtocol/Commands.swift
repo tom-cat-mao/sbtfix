@@ -108,6 +108,13 @@ public enum Command {
         }
     }
 
+    public static func powerOff(_ version: ProtocolVersion) -> [UInt8] {
+        switch version {
+        case .v1: [0x22, 0x00, 0x01]
+        case .v2: [0x24, 0x03, 0x01]
+        }
+    }
+
     // MARK: Speak-to-Chat
 
     public static func getSpeakToChat(_ version: ProtocolVersion) -> [UInt8] {
