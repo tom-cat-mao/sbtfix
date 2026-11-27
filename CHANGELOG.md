@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+## 1.1.0
+
+- Power off Sony headphones from the menu
+- Native segmented mode control with automatic Liquid Glass styling on macOS 26 and later
+- Release builds use the macOS 27 SDK
 - Screenshots of every state in the README, in light and dark mode
 - `sbtfix --screenshots <dir>` regenerates them
 - Release notes are now built from this changelog automatically

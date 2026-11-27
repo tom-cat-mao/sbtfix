@@ -103,6 +103,10 @@ Examples:
 | → GET | `22 <kind>`. `00` = single, `09` = left/right (e.g. WF-1000XM5), `01` = left/right on some models (e.g. WF-C700N), `0A` = case |
 | ← RET/NOTIFY | Single/case: `23 <kind> <level%> <charging>` (`25 …` for NOTIFY). Left/right: `23 <kind> <L%> <Lchg> <R%> <Rchg>`. A level of 0 means that earbud isn't connected. |
 
+### Power off (`24`, v2)
+
+→ SET: `24 03 01`. The headphones turn off and close the Bluetooth connection.
+
 ### Speak-to-Chat on/off (`F6`–`F9`, sub-code `0C`)
 
 | Direction | Payload |
@@ -136,6 +140,10 @@ GET: `66 02`. SET / RET / NOTIFY (8 bytes):
 
 GET `10 <kind>` (`00` single, `01` left/right, `02` case). Replies are `11`/`13` with the same
 layout as v2.
+
+### Power off (`22`, v1)
+
+→ SET: `22 00 01`. The headphones turn off and close the Bluetooth connection.
 
 ### Speak-to-Chat (v1)
 
